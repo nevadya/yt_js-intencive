@@ -4,7 +4,6 @@ const switcher = document.querySelector('#cbx');
 	  videos = document.querySelectorAll('.videos__item');
 let player;
 
-
 function blindSlideToggle (trigger, boxBody, content, openClass) {
 	let button = {
 		'element': document.querySelector(trigger),
@@ -31,35 +30,38 @@ blindSlideToggle('.hamburger', '[data-slide="nav"]', '.header__menu','slide-acti
 function switchMode () {
 	if (night === false) {
 		night = true;
+        //document.body.style.backgroundColor = '#000';
 		document.body.classList.add('night');
 		document.querySelectorAll('.hamburger > line').forEach(item => {
 			item.style.stroke = '#fff';
 		});
 
+        document.querySelectorAll('.videos__item-descr').forEach(item => {
+            item.style.color = '#fff';
+        });
+        document.querySelectorAll('.videos__item-views').forEach(item => {
+            item.style.color = '#fff';
+        });
         document.querySelector('.header__item-descr').style.color = '#fff';
 
         document.querySelector('.logo > img').src = 'logo/youtube_night.svg';
 
-        document.querySelectorAll('.videos__item-descr').forEach(item => {
-            item.style.color = '#fff';
-        });
 
 	} else {
-		night = false;
-		document.body.classList.remove('night');
-		document.querySelectorAll('.hamburger > line').forEach(item => {
-			item.style.stroke = '#000';
-		});
-
-        document.querySelector('.logo > img').src = 'logo/youtube.svg';
-
-        document.querySelector('.header__item-descr').style.color = '#000';
-
+        night = false;
+        document.body.classList.remove('night');
+        document.querySelectorAll('.hamburger > line').forEach(item => {
+            item.style.stroke = '#000';
+        });
         document.querySelectorAll('.videos__item-descr').forEach(item => {
             item.style.color = '#000';
         });
-
-	}
+        document.querySelectorAll('.videos__item-views').forEach(item => {
+            item.style.color = '#000';
+        });
+        document.querySelector('.header__item-descr').style.color = '#000';
+        document.querySelector('.logo > img').src ='logo/youtube.svg';
+    }
 }
 
 let night = false;
@@ -79,7 +81,7 @@ const data = [
 
 more.addEventListener('click', () => {
     const videosWrapper = document.querySelector('.videos__wrapper');
-    more.remove();
+    more.remove(); // Удалить кнопку "загрузить еще" после нажатия
 
     for (let i = 0; i < data[0].length; i++) {
         let card = document.createElement('a');
@@ -95,16 +97,17 @@ more.addEventListener('click', () => {
                 ${data[2][i]}
             </div>
             `;
-        videosWrapper.appendChild(card);
+        videosWrapper.appendChild(card); // Добавление в конец карточки новой
         setTimeout(() => {
             card.classList.remove('videos__item-active');
         }, 10);
         bindNewModal(card);
     } //конец цикла
+
     sliceTitle('.videos__item-descr', 100);
 });
 
-function sliceTitle() {
+function sliceTitle() { //ф-я обрезки заголовка
     document.querySelectorAll('.videos__item-descr').forEach(item => {
         item.textContent.trim();
 
@@ -120,7 +123,6 @@ sliceTitle('.videos__item-descr', 100);
 
 function openModal() {
     modal.style.display = 'block';
-    
 }
 
 function closeModal() {
@@ -143,6 +145,9 @@ bindModal(videos);
 function bindNewModal(cards) {
     cards.addEventListener('click', (e) => {
         e.preventDefault();
+        openModal();
+        const id = cards.getAttribute('data-url');
+        loadVideo(id);
         openModal();
     });
 }
