@@ -4,7 +4,7 @@ const switcher = document.querySelector('#cbx');
 	  videos = document.querySelectorAll('.videos__item');
 let player;
 
-function blindSlideToggle (trigger, boxBody, content, openClass) {
+function bindSlideToggle (trigger, boxBody, content, openClass) {
 	let button = {
 		'element': document.querySelector(trigger),
 		'active': false
@@ -25,7 +25,7 @@ function blindSlideToggle (trigger, boxBody, content, openClass) {
 	})
 }
 
-blindSlideToggle('.hamburger', '[data-slide="nav"]', '.header__menu','slide-active' );
+bindSlideToggle('.hamburger', '[data-slide="nav"]', '.header__menu','slide-active' );
 
 function switchMode () {
 	if (night === false) {
@@ -104,6 +104,15 @@ more.addEventListener('click', () => {
         bindNewModal(card);
     } //конец цикла
 
+    if (night === true) {
+        document.querySelectorAll('.videos__item-descr').forEach(item => {
+            item.style.color = '#fff';
+        });
+
+        document.querySelectorAll('.videos__item-views').forEach(item => {
+            item.style.color = '#fff';
+        });
+    }
     sliceTitle('.videos__item-descr', 100);
 });
 
