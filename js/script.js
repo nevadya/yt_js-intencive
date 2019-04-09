@@ -99,5 +99,77 @@ more.addEventListener('click', () => {
         setTimeout(() => {
             card.classList.remove('videos__item-active');
         }, 10);
+        bindNewModal(card);
+    } //конец цикла
+    sliceTitle('.videos__item-descr', 100);
+});
+
+function sliceTitle() {
+    document.querySelectorAll('.videos__item-descr').forEach(item => {
+        item.textContent.trim();
+
+        if (item.textContent.length < 100) {
+            return;
+        } else {
+            const str = item.textContent.slice(0, 101) + '...';
+            item.textContent = str;
+        }
+    });
+}
+sliceTitle('.videos__item-descr', 100);
+
+function openModal() {
+    modal.style.display = 'block';
+    
+}
+
+function closeModal() {
+    modal.style.display = 'none';
+    player.stopVideo(); //останавливаем видео, если закрыто модальное окно
+}
+
+function bindModal(cards) {
+    cards.forEach(item => {
+       item.addEventListener('click', (e) => {
+           e.preventDefault();
+           const id = item.getAttribute('data-url');
+           loadVideo(id);
+           openModal();
+       });
+    });
+}
+bindModal(videos);
+
+function bindNewModal(cards) {
+    cards.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+    });
+}
+
+modal.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('modal__body')) {
+        closeModal();
     }
 });
+
+function createVideo() {
+    var tag = document.createElement('script'); // создаем скрипт
+
+    tag.src = "https://www.youtube.com/iframe_api"; //ссылка на скрипт
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag); //вставка скрипта на страницу
+
+    setTimeout(()=> {
+        player = new YT.Player('frame', {
+            height: '100%',
+            width: '100%',
+            videoId: 'M7lc1UVf-VE',
+        });
+    }, 300); // создаем плеер с отсрочкой в 300мс
+}
+createVideo();
+
+function loadVideo(id) {
+    player.loadVideoById({'videoId': `${id}`});
+}
